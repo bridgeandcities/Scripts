@@ -14,6 +14,9 @@ I'm also currently testing out [slacktee.sh](https://github.com/course-hero/slac
 
 The Scripts [Reddit thread](https://www.reddit.com/r/homelab/comments/779cha/manual_fan_control_on_r610r710_including_script/)
 
+#Remember to make the script executable
+'chmod +x /etc/init.d/startupfan.sh'
+
 *****
 
 # Howto: Setting the fan speed of the Dell R610/R710
