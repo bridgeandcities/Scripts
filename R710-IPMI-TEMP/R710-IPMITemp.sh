@@ -12,7 +12,7 @@
 # Change this to the temperature in celcius you are comfortable with.
 # If the temperature goes above the set degrees it will send raw IPMI command to enable dynamic fan control
 MAXTEMP=39
-TEMP_STEP1=28
+TEMP_STEP1=26
 TEMP_STEP2=30
 TEMP_STEP3=32
 
