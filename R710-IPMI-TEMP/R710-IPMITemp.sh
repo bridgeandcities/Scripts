@@ -12,6 +12,7 @@
 # Change this to the temperature in celcius you are comfortable with.
 # If the temperature goes above the set degrees it will send raw IPMI command to enable dynamic fan control
 MAXTEMP=39
+TEMP_STEP0=23
 TEMP_STEP1=26
 TEMP_STEP2=30
 TEMP_STEP3=32
@@ -28,10 +29,14 @@ TEMP=$(ipmitool -I open sdr type temperature |grep Ambient |grep degrees |grep -
 if [ $TEMP -ge $MAXTEMP ]; then
         echo " $TEMP is > $MAXTEMP. Switching to automatic fan control "
         ipmitool -I open raw 0x30 0x30 0x01 0x01
-elif [ $TEMP -le $TEMP_STEP1 ]; then
+elif [ $TEMP -le $TEMP_STEP0 ]; then
         echo " $TEMP is < $TEMP_STEP1. Switching to manual control @1200rpm "
         ipmitool -I open raw 0x30 0x30 0x01 0x00
         ipmitool -I open raw 0x30 0x30 0x02 0xff 0x01
+elif [ $TEMP -le $TEMP_STEP1 ]; then
+        echo " $TEMP is < $TEMP_STEP1. Switching to manual control @1400rpm "
+        ipmitool -I open raw 0x30 0x30 0x01 0x00
+        ipmitool -I open raw 0x30 0x30 0x02 0xff 0x03
 elif [ $TEMP -le $TEMP_STEP2 ]; then
         echo " $TEMP is < $TEMP_STEP2. Switching to manual control @2000rpm "
         ipmitool -I open raw 0x30 0x30 0x01 0x00
@@ -41,4 +46,5 @@ elif [ $TEMP -le $TEMP_STEP3 ]; then
         ipmitool -I open raw 0x30 0x30 0x01 0x00
         ipmitool -I open raw 0x30 0x30 0x02 0xff 0x10
 fi
+
 
