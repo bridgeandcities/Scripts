@@ -1,21 +1,12 @@
 # Safety BASH script
-I made a BASH script to check the temperature, and if it's higher than XX (27 degrees C in my case) it sends a raw command to restore automatic fan control. 
+Based off of this [Reddit thread](https://www.reddit.com/r/homelab/comments/779cha/manual_fan_control_on_r610r710_including_script/) which was inspired by [this Reddit post](https://www.reddit.com/r/homelab/comments/72qust/r510_noise/dnkofsv/) by /u/whitekidney. 
 
-I'm running this on an Ubuntu VM on ESXi (on the R710 box), but it should be able to run as long as you have ipmitools. It could be you need to modify the logging, to make it work with whatever your system use.
+Instead of running this script on a separate machine, my code runs directly on the host, therefore removing the dependency on another host to continually supply the queries for the original script to work (so the script host failing doesnt burn down my server). Also removes slack and healthcheck.io parts of the code.
 
-I run the script via CRON every 5 minutes from my Ubuntu Server VM running on ESXi.
+This is running on my Dell R710 on the host Debian based Proxmox hypervisor.
 
-`*/5 * * * * /bin/bash /path/to/script/R710-IPMITemp.sh > /dev/null 2>&1`
-
-Notice that I use [healthchecks.io](https://healthchecks.io) in the script to notify if the temp goes to high (it would also trigger if the internet goes down for some reason). Remember to get your own check URL if you want it, or else just remove the curl command.
-
-I'm also currently testing out [slacktee.sh](https://github.com/course-hero/slacktee) to get notifications in my slack channel.
-
-
-The Scripts [Reddit thread](https://www.reddit.com/r/homelab/comments/779cha/manual_fan_control_on_r610r710_including_script/)
-
-#Remember to make the script executable
-'chmod +x /etc/init.d/startupfan.sh'
+Remember to make the script executable:
+`chmod +x /etc/init.d/startupfan.sh`
 
 *****
 
@@ -23,7 +14,7 @@ The Scripts [Reddit thread](https://www.reddit.com/r/homelab/comments/779cha/man
 
 1. Enable IPMI in iDrac
 2. Install ipmitool on linux, win or mac os
-3. Run the following command to issue IPMI commands: 
+3. Run the following command to issue IPMI commands from the server terminal: 
 `ipmitool -I lanplus -H <iDracip> -U root -P <rootpw> <command>`
 
 
@@ -70,4 +61,3 @@ TLDR; I take _NO_ responsibility if you mess up anything.
 
 *****
 
-All of this was inspired by [this Reddit post](https://www.reddit.com/r/homelab/comments/72qust/r510_noise/dnkofsv/) by /u/whitekidney 
